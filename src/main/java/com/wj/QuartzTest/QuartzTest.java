@@ -3,6 +3,8 @@ package com.wj.QuartzTest;
 
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
+import org.quartz.impl.matchers.EverythingMatcher;
+import org.quartz.impl.matchers.KeyMatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,6 +68,14 @@ public class QuartzTest {
 
             // Tell quartz to schedule the job using our trigger
 //            scheduler.scheduleJob(job, trigger);
+
+            JobListener listener = new MyListener();
+            Matcher<JobKey> matcher = KeyMatcher.keyEquals(job2.getKey());
+
+            scheduler.getListenerManager().addJobListener(listener, matcher);
+//            scheduler.getListenerManager().addJobListener(listener, EverythingMatcher.allJobs());
+            System.out.println();
+
             scheduler.scheduleJob(job2, trigger2);
             scheduler.scheduleJob(job3, trigger3);
 
